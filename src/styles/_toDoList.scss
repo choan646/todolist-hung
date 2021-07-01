@@ -1,0 +1,48 @@
+.content__myToDo{
+    width: 100%;
+    background-color:#B2D9EA ;
+    min-height: 620px;
+    padding-bottom: 30px;
+    button{
+        &:focus{
+            outline: none
+        }
+    }
+    .todoList__detail{
+        width: 139%;
+        margin-top: 15px;
+        margin-left: -105px;
+        padding: 0 25px;
+        .todoList__item{
+            transition: all .2s;
+            opacity: 0.7;
+            background-color: #fff;
+            padding: 7px 15px;
+            margin-bottom: 20px;
+            position: relative;
+            &:hover{
+                opacity: 1;
+                background-color: #F4DCD6;
+                .todoList__button{
+                    display: flex;
+                }
+            }
+            .todoList__button{
+                position: absolute;
+                right: 20px;
+                top: 8%;
+                display: none;
+            }
+            .todoList__taskName{
+                span{
+                    margin: 10px;
+                    width: 450px;
+                    display: block;
+                    text-transform: uppercase;
+                    font-size: 14px;
+                    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                }
+            }
+        }
+    }
+}
