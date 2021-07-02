@@ -12,6 +12,7 @@ import {
   CHANGE_STATUS_REQUEST,
   CHANGE_STATUS_SUCCESS,
   CHANGE_STATUS_FAILURE,
+  FILTER_TODO
 } from "../constants/MyTodoConstants";
 import Swal from "sweetalert2";
 
@@ -64,7 +65,8 @@ export function delTask(id) {
         url: `https://60dc4f9dc2b6280017feb8a9.mockapi.io/taskList/${id}`,
       });
       Swal.fire("Xóa Thành Công !");
-      dispatch({ type: DEL_TASK_SUCCESS, payload: { data } });
+      // dispatch({ type: DEL_TASK_SUCCESS, payload: { data } });
+      //Không cần thiết dispatch lên, vì action này là action normal, api đã giải quyết việc delete
       dispatch(getTaskList());
     } catch (error) {
       Swal.fire("Có lỗi xảy ra!");
@@ -81,11 +83,10 @@ export function changeStatus(id) {
     dispatch({ type: CHANGE_STATUS_REQUEST });
     try {
       const data = await axios({
-        method: "POST",
+        method: 'PUT',
         url: `https://60dc4f9dc2b6280017feb8a9.mockapi.io/taskList/${id}`,
       });
       dispatch({ type: CHANGE_STATUS_SUCCESS, payload: { data } });
-      dispatch(getTaskList());
     } catch (error) {
       Swal.fire("Có lỗi xảy ra!");
       dispatch({
@@ -95,3 +96,12 @@ export function changeStatus(id) {
     }
   };
 }
+
+export const filterTodo = (status) => {
+  return {
+    type: FILTER_TODO,
+    payload: {
+      status,
+    },
+  };
+};

@@ -21,6 +21,7 @@ export default function TaskButton({
           width: "47px",
           height: "47px",
         }}
+        type="button"
         onClick={() => handleChangeStatus(data.id)}
       >
         {data.status == false ? (
@@ -45,6 +46,7 @@ export default function TaskButton({
       <IconButton
         variant="contained"
         color="secondary"
+        type="button"
         onClick={() => handleDelTodo(data.id)}
       >
         <DeleteIcon />
