@@ -11,14 +11,19 @@ import {
   CHANGE_STATUS_REQUEST,
   CHANGE_STATUS_SUCCESS,
   CHANGE_STATUS_FAILURE,
-  FILTER_TODO
+  FILTER_TODO,
+  SET_TASK_SELECTED,
+  UPDATE_TASK_REQUEST,
+  UPDATE_TASK_SUCCESS,
+  UPDATE_TASK_FAILURE,
 } from "../constants/MyTodoConstants";
 
 const initialState = {
   taskList: [],
+  taskSelected: {},
   isLoading: false,
   error: null,
-  filter:"all"
+  filter: "all",
 };
 
 function todoReducer(state = initialState, action) {
@@ -37,6 +42,9 @@ function todoReducer(state = initialState, action) {
         error: action.payload.error,
       };
     }
+    //Selected
+    case SET_TASK_SELECTED:
+      return { ...state, taskSelected: action.payload, isLoading: false };
 
     //ADD
     case ADD_TASK_REQUEST:
@@ -46,7 +54,7 @@ function todoReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        taskList:taskListUpdate,
+        taskList: taskListUpdate,
       };
     case ADD_TASK_FAILURE:
       return {
@@ -58,11 +66,11 @@ function todoReducer(state = initialState, action) {
     //DEL
     case DEL_TASK_REQUEST:
       return { ...state, isLoading: true, error: null };
-      case DEL_TASK_SUCCESS: {
-        const { id } = action.payload.data.data.id;
-        const taskListUpdate = state.taskList.filter((item) => item.id !== id);
-        return { ...state, isLoading: false, taskListUpdate };
-      }
+    case DEL_TASK_SUCCESS: {
+      const { id } = action.payload.data.data.id;
+      const taskListUpdate = state.taskList.filter((item) => item.id !== id);
+      return { ...state, isLoading: false, taskListUpdate };
+    }
     case DEL_TASK_FAILURE:
       return { ...state, isLoading: false, error: action.payload.error };
 
@@ -77,7 +85,7 @@ function todoReducer(state = initialState, action) {
         }
         return item;
       });
-      return { ...state, isLoading: false,taskList: taskListUpdate };
+      return { ...state, isLoading: false, taskList: taskListUpdate };
     }
     case CHANGE_STATUS_FAILURE:
       return {
@@ -86,11 +94,30 @@ function todoReducer(state = initialState, action) {
         error: action.payload.error,
       };
 
-      //FILTER 
-      case FILTER_TODO: {
-        const {status} = action.payload;
-        return { ...state, filter : status };
-      }
+    //FILTER
+    case FILTER_TODO: {
+      const { status } = action.payload;
+      return { ...state, filter: status };
+    }
+    //UPDATE
+    case UPDATE_TASK_REQUEST:
+      return { ...state, isLoading: true, error: null };
+    case UPDATE_TASK_SUCCESS: {
+      const { id } = action.payload.value;
+      const taskListUpdate = state.taskList.map((item) => {
+        if (item.id === id) {
+          return { ...item, taskName: action.payload.value.taskName };
+        }
+        return item;
+      });
+      return { ...state, isLoading: false, taskList: taskListUpdate };
+    }
+    case UPDATE_TASK_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+      };
 
     default:
       return state;

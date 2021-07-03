@@ -7,12 +7,16 @@ import {
   ADD_TASK_SUCCESS,
   ADD_TASK_FAILURE,
   DEL_TASK_REQUEST,
-  DEL_TASK_SUCCESS,
+  // DEL_TASK_SUCCESS,
   DEL_TASK_FAILURE,
   CHANGE_STATUS_REQUEST,
   CHANGE_STATUS_SUCCESS,
   CHANGE_STATUS_FAILURE,
-  FILTER_TODO
+  FILTER_TODO,
+  SET_TASK_SELECTED,
+  UPDATE_TASK_REQUEST,
+  UPDATE_TASK_SUCCESS,
+  UPDATE_TASK_FAILURE,
 } from "../constants/MyTodoConstants";
 import Swal from "sweetalert2";
 
@@ -31,6 +35,11 @@ export function getTaskList() {
         payload: { error: error.response?.data },
       });
     }
+  };
+}
+export function setTaskSelected(itemSelected) {
+  return (dispatch) => {
+    dispatch({ type: SET_TASK_SELECTED, payload: itemSelected });
   };
 }
 
@@ -60,7 +69,8 @@ export function delTask(id) {
   return async (dispatch) => {
     dispatch({ type: DEL_TASK_REQUEST });
     try {
-      const data = await axios({
+      // const data =
+      await axios({
         method: "DELETE",
         url: `https://60dc4f9dc2b6280017feb8a9.mockapi.io/taskList/${id}`,
       });
@@ -83,7 +93,7 @@ export function changeStatus(id) {
     dispatch({ type: CHANGE_STATUS_REQUEST });
     try {
       const data = await axios({
-        method: 'PUT',
+        method: "PUT",
         url: `https://60dc4f9dc2b6280017feb8a9.mockapi.io/taskList/${id}`,
       });
       dispatch({ type: CHANGE_STATUS_SUCCESS, payload: { data } });
@@ -105,3 +115,23 @@ export const filterTodo = (status) => {
     },
   };
 };
+
+export function updateTodo(value) {
+  return async (dispatch) => {
+    dispatch({ type: UPDATE_TASK_REQUEST });
+    try {
+      const data = await axios({
+        method: "PUT",
+        url: `https://60dc4f9dc2b6280017feb8a9.mockapi.io/taskList/${value.id}`,
+      });
+      Swal.fire("Sửa Thành Công !");
+      dispatch({ type: UPDATE_TASK_SUCCESS, payload: { value } });
+    } catch (error) {
+      Swal.fire("Có lỗi xảy ra!");
+      dispatch({
+        type: UPDATE_TASK_FAILURE,
+        payload: { error: error.response?.data },
+      });
+    }
+  };
+}

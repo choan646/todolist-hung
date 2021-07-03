@@ -5,15 +5,21 @@ import {
   getTaskList,
   changeStatus,
   filterTodo,
+  setTaskSelected,
+  updateTodo,
 } from "src/redux/actions/MyToDoActions";
 import { SemipolarLoading } from "react-loadingg";
 import TaskButton from "./TaskButton";
 import MyTodoFilter from "../MyTodoFilter";
+import ModalUpdateTask from "./ModalUpdateTask";
 
 export default function MyTodoListTask() {
   const dispatch = useDispatch();
 
-  const { taskList, isLoading, error, filter } = useSelector(
+  const [modalUpdate, setModalUpdate] = useState(false);
+  const toggleUpdate = () => setModalUpdate(!modalUpdate);
+
+  const { taskList, taskSelected, isLoading, filter } = useSelector(
     (state) => state.todo
   );
 
@@ -45,7 +51,17 @@ export default function MyTodoListTask() {
   const handleFilter = (value) => {
     dispatch(filterTodo(value));
   };
-  console.log(filterData);
+
+  const getTaskSelected = (itemSelected) => {
+    dispatch(setTaskSelected(itemSelected));
+    toggleUpdate();
+  };
+  const handleUpdate = (item) => {
+    toggleUpdate();
+    dispatch(updateTodo(item));
+  };
+
+  // console.log(taskList)
   if (isLoading) {
     return (
       <div>
@@ -58,6 +74,7 @@ export default function MyTodoListTask() {
       <div className="row justify-content-center">
         <div className="col-12 col-md-9 col-lg-7 col-xl-6">
           <MyTodoFilter handleFilter={handleFilter} />
+
           <div className="todoList__detail container">
             {filterData?.map((item) => (
               <div className="todoList__item d-flex" key={item.id}>
@@ -65,7 +82,7 @@ export default function MyTodoListTask() {
                   <span
                     style={{
                       textDecoration:
-                        item.status != true ? "none" : "line-through",
+                        item.status !== true ? "none" : "line-through",
                     }}
                   >
                     {item.taskName}{" "}
@@ -74,10 +91,17 @@ export default function MyTodoListTask() {
                 <TaskButton
                   data={item}
                   handleDelTodo={handleDelTodo}
+                  getTaskSelected={getTaskSelected}
                   handleChangeStatus={handleChangeStatus}
                 />
               </div>
             ))}
+            <ModalUpdateTask
+              dataSelected={taskSelected}
+              modalUpdate={modalUpdate}
+              toggleUpdate={toggleUpdate}
+              handleUpdate={handleUpdate}
+            />
           </div>
         </div>
       </div>

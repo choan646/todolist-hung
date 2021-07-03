@@ -17,7 +17,7 @@ export default function MyTodoAdd() {
 
   const handleChange =(value) => {
     setValueInput(value)
-    if(value != "") {
+    if(value !== "") {
     setDisabled(false)
     }
     else{

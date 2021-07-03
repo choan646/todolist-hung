@@ -10,6 +10,7 @@ export default function TaskButton({
   data,
   handleDelTodo,
   handleChangeStatus,
+  getTaskSelected,
 }) {
   return (
     <div className="todoList__button">
@@ -24,7 +25,7 @@ export default function TaskButton({
         type="button"
         onClick={() => handleChangeStatus(data.id)}
       >
-        {data.status == false ? (
+        {data.status === false ? (
           <DoneIcon style={{ color: green[500] }} />
         ) : (
           <ClearIcon color="secondary" />
@@ -35,6 +36,7 @@ export default function TaskButton({
         size="small"
         variant="outlined"
         color="primary"
+        onClick={() => getTaskSelected(data)}
         style={{
           marginRight: "10px",
           width: "47px",
@@ -43,6 +45,7 @@ export default function TaskButton({
       >
         <EditIcon />
       </IconButton>
+
       <IconButton
         variant="contained"
         color="secondary"
